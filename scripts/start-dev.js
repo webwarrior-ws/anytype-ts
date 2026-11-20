@@ -61,7 +61,10 @@ function waitForLocalhost (port) {
 };
 
 function startElectron () {
-	const args = isWindows ? [ 'electron.cmd', '.' ] : [ 'electron', '.' ];
+	// Note: pass the bare 'electron' name on all platforms. bunx resolves the
+	// local node_modules/.bin/electron binary itself; adding the '.cmd' suffix
+	// makes bunx treat 'electron.cmd' as an npm package name (404 on npm).
+	const args = [ 'electron', '.' ];
 
 	electronProcess = childProcess.spawn('bunx', args, {
 		stdio: 'inherit',
