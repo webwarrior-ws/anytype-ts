@@ -1,3 +1,9 @@
+This is a fork with some chenges that I've made for myself.
+
+# Changes in this fork
+
+- Use native window title bar to be compatible with Aero theme on Windows 
+
 # Anytype Desktop
 
 > **Local‑first, peer‑to‑peer & end‑to‑end‑encrypted knowledge OS for macOS, Windows & Linux.**

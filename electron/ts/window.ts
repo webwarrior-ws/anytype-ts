@@ -26,7 +26,6 @@ const MIN_WIDTH = 640;
 const MIN_HEIGHT = 480;
 const NEW_WINDOW_SHIFT = 30;
 const TAB_BAR_HEIGHT = 52;
-const MENU_BAR_HEIGHT = 28;
 
 class WindowManager {
 
@@ -128,8 +127,8 @@ class WindowManager {
 			param.trafficLightPosition = { x: 12, y: 19 };
 		} else
 		if (is.windows) {
-			param.frame = false;
-			param.titleBarStyle = 'hidden';
+			param.frame = true;
+			param.titleBarStyle = 'default';
 			param.icon = path.join(Util.imagePath(), 'icons', '256x256.ico');
 		} else
 		if (is.linux) {
@@ -538,41 +537,6 @@ class WindowManager {
 		view.webContents.on('context-menu', (e: Electron.Event, param: Electron.ContextMenuParams) => {
 			Util.sendToTab(win, view.id, 'spellcheck', param.misspelledWord, param.dictionarySuggestions, param.x, param.y, param.selectionRect);
 		});
-
-		// Alt key handling for menu bar toggle (Windows/Linux)
-		// This allows Alt to work even when focus is on the tab content, not the tabs.html
-		if (is.windows || is.linux) {
-			let altKeyPressed = false;
-			let altKeyUsedWithOther = false;
-
-			view.webContents.on('before-input-event', (e: Electron.Event, input: Electron.Input) => {
-				const { showMenuBar } = ConfigManager.config;
-
-				// Only handle Alt toggle if menu bar is hidden by config
-				if (showMenuBar) {
-					return;
-				};
-
-				if (input.type === 'keyDown') {
-					if (input.key === 'Alt') {
-						altKeyPressed = true;
-						altKeyUsedWithOther = false;
-					} else
-					if (altKeyPressed) {
-						// Alt was used as modifier with another key
-						altKeyUsedWithOther = true;
-					};
-				} else
-				if ((input.type === 'keyUp') && (input.key === 'Alt')) {
-					// Alt was released - toggle menu bar if it wasn't used as modifier
-					if (altKeyPressed && !altKeyUsedWithOther) {
-						Util.send(win, 'alt-key-toggle');
-					};
-					altKeyPressed = false;
-					altKeyUsedWithOther = false;
-				};
-			});
-		};
 
 		// Re-apply tab state after every load (initial and reload after resume)
 		view.webContents.on('did-finish-load', () => {
@@ -1014,18 +978,12 @@ class WindowManager {
 		};
 
 		const alwaysShow = ConfigManager.config.alwaysShowTabs;
-		const configShowMenuBar = ConfigManager.config.showMenuBar;
 		const hasMultipleTabs = win.views && win.views.length > 1;
 		const hasPinnedTab = win.views && win.views.some((it: TabView) => it.data && it.data.isPinned);
 		const shouldShowTabs = alwaysShow || hasPinnedTab || hasMultipleTabs;
 
-		// Check for temporary menu bar visibility (Alt key toggle)
-		const showMenuBar = win.tempMenuBarVisible !== undefined ? win.tempMenuBarVisible : configShowMenuBar;
-
+		// The menu bar is native and sits outside the content area, so no offset is needed
 		let height = 0;
-		if (is.windows && showMenuBar) {
-			height += MENU_BAR_HEIGHT;
-		};
 		if (shouldShowTabs) {
 			height += TAB_BAR_HEIGHT;
 		};

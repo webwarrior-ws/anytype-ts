@@ -11,7 +11,6 @@ export interface AppWindow extends BrowserWindow {
 	route?: string;
 	activeTabId?: string;
 	views?: TabView[];
-	tempMenuBarVisible?: boolean;
 };
 
 /** A WebContentsView augmented with tab metadata */
