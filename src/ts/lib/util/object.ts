@@ -164,6 +164,20 @@ class UtilObject {
 		return true;
 	};
 
+	/**
+	 * Open object's Source in the browser if object has Source property.
+	 * Returns false if object doesn't have Source prop.
+	 */
+	openSource (object: any): boolean {
+		const source = Relation.getStringValue(object.source);
+		if (!source) {
+			return false;
+		};
+
+		Action.openUrl(source);
+		return true;
+	};
+
 	openEvent (e: any, object: any, param?: any) {
 		if (!object) {
 			return;

@@ -823,7 +823,12 @@ const Block = forwardRef<Ref, Props>((props, ref) => {
 				U.Dom.addClass(item, 'disabled');
 			};
 
-			item.onmousedown = (e: Event) => {
+			item.onmousedown = (e: MouseEvent) => {
+				// Open link in browser on middle-click
+				if (U.Common.checkAuxButton(e)) {
+					return;
+				}
+				
 				e.preventDefault();
 
 				object._routeParam_ = {};

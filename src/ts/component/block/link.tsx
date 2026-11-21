@@ -47,9 +47,12 @@ const BlockLink = forwardRef<I.BlockRef, I.BlockComponent>((props, ref) => {
 		U.Menu.archivedContext(e, block.getTargetObjectId(), () => setIsRestored(true));
 	};
 
-	const onClick = (e: any) => {
+	const onClick = (e: MouseEvent) => {
+		// On middle-click, if object has Source property, open it in browser.
 		if (U.Common.checkAuxButton(e)) {
-			return;
+			if (U.Object.openSource(object)) {
+				return;
+			}
 		};
 
 		const selection = S.Common.getRef('selectionProvider');
