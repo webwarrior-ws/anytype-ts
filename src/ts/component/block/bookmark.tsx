@@ -10,7 +10,7 @@ const BlockBookmark = forwardRef<I.BlockRef, I.BlockComponent>((props, ref) => {
 	const { state, targetObjectId } = block.content;
 	const nodeRef = useRef<HTMLDivElement>(null);
 	const innerRef = useRef<HTMLAnchorElement>(null);
-	const object = S.Detail.get(rootId, targetObjectId, [ 'picture', 'source' ]);
+	const object = S.Detail.get(rootId, targetObjectId, [ 'layout', 'picture', 'source' ]);
 	const { iconImage, picture, isArchived, isDeleted } = object;
 	const url = block.content.url || object.source;
 	const cn = [ 'focusable', `c${block.id}` ];
@@ -45,7 +45,7 @@ const BlockBookmark = forwardRef<I.BlockRef, I.BlockComponent>((props, ref) => {
 		};
 
 		e.stopPropagation();
-		open();
+		open(e);
 	};
 
 	const onMouseEnter = (e: MouseEvent) => {
@@ -77,10 +77,17 @@ const BlockBookmark = forwardRef<I.BlockRef, I.BlockComponent>((props, ref) => {
 		e.preventDefault();
 		e.stopPropagation();
 
-		open();
+		open(e);
 	};
 
-	const open = () => {
+	const open = (e?: any) => {
+		// Shift+left click opens the bookmark object itself in a popup,
+		// everything else opens the bookmark's source in the browser
+		if (e && e.shiftKey && !e.button && targetObjectId && !object._empty_) {
+			U.Object.openPopup(object);
+			return;
+		};
+
 		Action.openUrl(url);
 		analytics.event('BlockBookmarkOpenUrl');
 	};

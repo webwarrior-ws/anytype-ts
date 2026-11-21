@@ -3,6 +3,7 @@ This is a fork with some chenges that I've made for myself.
 # Changes in this fork
 
 - Use native window title bar to be compatible with Aero theme on Windows 
+- Shift+click always opens a bookmark as object in popup (instead of opening link in browser, as is was for bookmark link blocks)
 
 # Anytype Desktop
 
