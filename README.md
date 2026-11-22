@@ -5,6 +5,7 @@ This is a fork with some chenges that I've made for myself.
 - Use native window title bar to be compatible with Aero theme on Windows 
 - Shift+click always opens a bookmark as object in popup (instead of opening link in browser, as is was for bookmark link blocks)
 - Middle-click always opens link the in browser for bookmarks and all objects that have "Source" property
+- Tag menu has "Objects with this tag" submenu that contains list of objects that has the tag and allows to open them
 
 # Anytype Desktop
 

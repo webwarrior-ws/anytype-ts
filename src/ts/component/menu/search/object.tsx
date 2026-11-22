@@ -231,7 +231,9 @@ const MenuSearchObject = forwardRef<I.MenuRef, I.Menu>((props, ref) => {
 		const process = (target: any, isNew: boolean) => {
 			onSelect?.(target, isNew);
 
-			if (!type) {
+			// NavigationType.Go is 0 — a falsy check here would silently swallow
+			// plain "open object" clicks, so only skip when no type was passed
+			if (undefined === type) {
 				return;
 			};
 

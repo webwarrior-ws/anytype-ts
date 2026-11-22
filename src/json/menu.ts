@@ -49,6 +49,7 @@ export default {
 	],
 	object: [ 'select', 'searchObject' ],
 	objectContext: [ 'typeSuggest', 'searchObject', 'select', 'chatCreate' ],
+	optionEdit: [ 'searchObject' ],
 	index: [ 'searchObject' ],
 	relationEdit: [
 		'select',

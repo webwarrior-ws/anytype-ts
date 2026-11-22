@@ -4,8 +4,8 @@ import * as I from 'Interface';
 
 const MenuOptionEdit = forwardRef<I.MenuRef, I.Menu>((props, ref) => {
 	
-	const { id, param, getId, getContainer, close, setActive, onKeyDown } = props;
-	const { data } = param;
+	const { id, param, getId, getContainer, getSize, close, setActive, onKeyDown } = props;
+	const { data, className, classNameWrap } = param;
 	const { option, isNew, onChange, relationKey } = data;
 	const [ dummy, setDummy ] = useState(0);
 	const nodeRef = useRef(null);
@@ -29,19 +29,27 @@ const MenuOptionEdit = forwardRef<I.MenuRef, I.Menu>((props, ref) => {
 		};
 	};
 
+	const getOptionRelationKey = (): string => {
+		return option.relationKey || data.relationKey || '';
+	};
+
 	const getSections = () => {
 		const colors = U.Menu.getBgColors().filter(it => it.id != 'bgColor-default');
+		const children: any[] = [];
 
-		let button = null;
+		if (!isNew && getOptionRelationKey()) {
+			children.push({ id: 'objects', iconParam: { name: 'menu/action/object' }, name: translate('menuDataviewOptionEditObjects'), arrow: true });
+		};
+
 		if (isNew) {
-			button = { id: 'create', iconParam: { name: 'menu/action/add' }, name: translate('menuDataviewOptionEditCreate') };
+			children.push({ id: 'create', iconParam: { name: 'menu/action/add' }, name: translate('menuDataviewOptionEditCreate') });
 		} else {
-			button = { id: 'remove', iconParam: { name: 'menu/action/remove' }, name: translate('menuDataviewOptionEditDelete') };
+			children.push({ id: 'remove', iconParam: { name: 'menu/action/remove' }, name: translate('menuDataviewOptionEditDelete') });
 		};
 
 		return [
 			{ children: colors, className: 'colorPicker' },
-			{ children: [ button ] },
+			{ children },
 		];
 	};
 
@@ -109,14 +117,47 @@ const MenuOptionEdit = forwardRef<I.MenuRef, I.Menu>((props, ref) => {
 		};
 	};
 
-	const onMouseEnter = (e: any, item: any) => {
-		const el = U.Dom.select(`#item-${U.Common.esc(item.id)}`, getContainer());
-
-		if (U.Dom.hasClass(el, 'disabled') || keyboard.isMouseDisabled) {
+	const onOver = (e: any, item: any) => {
+		if (!item.arrow) {
+			S.Menu.closeAll(J.Menu.optionEdit);
 			return;
 		};
 
-		setActive(item, false);
+		const menuParam: I.MenuParam = {
+			menuKey: item.id,
+			element: `#${getId()} #item-${U.Common.esc(item.id)}`,
+			offsetX: getSize().width,
+			vertical: I.MenuDirection.Center,
+			isSub: true,
+			className,
+			classNameWrap,
+			rebind,
+			parentId: props.id,
+			data: {
+				label: option.name,
+				type: I.NavigationType.Go,
+				route: analytics.route.relation,
+				filters: [
+					{ relationKey: getOptionRelationKey(), condition: I.FilterCondition.In, value: [ option.id ] },
+				],
+				skipIds: [ option.id ],
+			},
+		};
+
+		const menuId = 'searchObject';
+
+		if (!S.Menu.isOpen(menuId, item.id)) {
+			S.Menu.closeAll(J.Menu.optionEdit, () => {
+				S.Menu.open(menuId, menuParam);
+			});
+		};
+	};
+
+	const onMouseEnter = (e: any, item: any) => {
+		if (!keyboard.isMouseDisabled) {
+			setActive(item, false);
+			onOver(e, item);
+		};
 	};
 
 	const onClear = () => {
@@ -243,6 +284,7 @@ const MenuOptionEdit = forwardRef<I.MenuRef, I.Menu>((props, ref) => {
 			isUnmountedRef.current = true;
 
 			unbind();
+			S.Menu.closeAll(J.Menu.optionEdit);
 		};
 	}, []);
 
@@ -258,6 +300,7 @@ const MenuOptionEdit = forwardRef<I.MenuRef, I.Menu>((props, ref) => {
 		getIndex: () => n.current,
 		setIndex: (i: number) => n.current = i,
 		onClick,
+		onOver,
 	}), []);
 
 	return (

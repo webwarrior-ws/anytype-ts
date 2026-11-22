@@ -2334,6 +2334,7 @@
 	"menuDataviewOptionCreatePlaceholder": "New option",
 	"menuDataviewOptionEditPlaceholder": "Option name",
 	"menuDataviewOptionEditDelete": "Delete option",
+	"menuDataviewOptionEditObjects": "Objects with this tag",
 	"menuDataviewOptionEditCreate": "Create option",
 	"menuDataviewObjectTypeEditName": "Object Type name",
 	"menuDataviewObjectTypeEditLayout": "Layout",
