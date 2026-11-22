@@ -83,12 +83,34 @@ const ListRow = forwardRef<I.RowRef, Props>((props, ref) => {
 		cn.push('editModeOn');
 	};
 
+	const onMouseDown = (e: any) => {
+		// Middle button: suppress the browser's default autoscroll - the open action runs on
+		// auxclick instead (click fires for the primary button only).
+		if (U.Common.checkAuxButton(e)) {
+			e.preventDefault();
+		};
+	};
+
+	const onAuxClick = (e: any) => {
+		// Right-click is served by onContextMenu; auxclick drives the middle button here.
+		if (e.button == 2) {
+			return;
+		};
+
+		onClick(e);
+	};
+
 	const onClick = (e: any) => {
 		e.preventDefault();
 
 		const cb = {
 			0: () => U.Object.openConfig(e, record),
-			1: () => U.Object.openConfig(e, record),
+			// Middle button: objects with Source open it in the browser, the rest open in a new tab.
+			1: () => {
+				if (!U.Object.openSource(record)) {
+					U.Object.openConfig(e, record);
+				};
+			},
 			2: () => onContext(e, record.id)
 		};
 
@@ -259,7 +281,9 @@ const ListRow = forwardRef<I.RowRef, Props>((props, ref) => {
 				ref={nodeRef} 
 				className={cn.join(' ')}
 				style={style}
+				onMouseDown={onMouseDown}
 				onClick={e => onClick(e)}
+				onAuxClick={onAuxClick}
 				onContextMenu={e => onContext(e, record.id)}
 				{...U.Common.animationProps({
 					transition: { duration: 0.2, delay: 0.1 },
