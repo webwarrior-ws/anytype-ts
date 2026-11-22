@@ -31,7 +31,7 @@ class UtilCommon {
 	 * @returns {boolean} True if it's an auxiliary button, false otherwise.
 	 */
 	checkAuxButton (e: MouseEvent | React.MouseEvent) {
-		return !!(e.button && (e.button !== 1));
+		return !!(e.button && (e.button === 1));
 	};
 
 	/**
