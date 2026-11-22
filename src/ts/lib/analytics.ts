@@ -132,8 +132,7 @@ class Analytics {
 	 * @returns {boolean} True if analytics is allowed.
 	 */
 	isAllowed (): boolean {
-		const { config } = S.Common;
-		return !(config.sudo || !U.Common.getElectron().isPackaged) || this.debug();
+		return false;
 	};
 	
 	/**

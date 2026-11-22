@@ -124,8 +124,6 @@
 		"@lexical/utils": "^0.40.0",
 		"@mermaid-js/layout-elk": "^0.2.0",
 		"@number-flow/react": "^0.5.11",
-		"@sentry/browser": "^7.39.0",
-		"@sentry/cli": "^2.18.1",
 		"@sindresorhus/slugify": "^3.0.0",
 		"@types/d3": "^7.4.3",
 		"@viz-js/viz": "^3.2.4",
@@ -206,7 +204,6 @@
 		"generateUpdatesFilesForAllChannels": true,
 		"beforeBuild": "./electron/hook/beforebuild.js",
 		"afterSign": "./electron/hook/aftersign.js",
-		"afterPack": "./electron/hook/afterpack.js",
 		"appId": "com.anytype.anytype",
 		"compression": "normal",
 		"productName": "Anytype",
@@ -1114,7 +1111,6 @@
 		}
 	},
 	"trustedDependencies": [
-		"@sentry/cli",
 		"@swc/core",
 		"electron"
 	]

@@ -166,7 +166,6 @@
 		"https://miro.com",
 		"https://*.miro.com",
 		"https://*.cookielaw.org",
-		"https://*.sentry.io",
 		"https://*.split.io",
 		"https://*.onetrust.com",
 		"https://mirostatic.com",
@@ -192,7 +191,6 @@
 		"https://sketchfab.com",
 		"https://media.sketchfab.com",
 		"https://*.diagrams.net",
-		"https://sentry.io",
 		"https://*.any.coop",
 		"https://*.amplitude.com",
 		"https://kroki.io",
@@ -213,7 +211,6 @@
 		"anytype-embed:",
 		"'unsafe-inline'",
 		"http://localhost:*",
-		"https://sentry.io",
 		"devtools://devtools",
 		"https://*.youtube.com",
 		"https://*.youtube-nocookie.com",
@@ -254,8 +251,7 @@
 		"https://unpkg.com/@excalidraw/",
 		"https://bandcamp.com",
 		"https://*.bcbits.com",
-		"http://*.openstreetmap.fr/",
-		"https://*.sentry-cdn.com/"
+		"http://*.openstreetmap.fr/"
 	],
 
 	"frame-src": [

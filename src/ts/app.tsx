@@ -1,6 +1,5 @@
 import React, { FC, useState, useRef, useEffect, useCallback } from 'react';
 import * as hs from 'history';
-import * as Sentry from '@sentry/browser';
 import raf from 'raf';
 import { RouteComponentProps } from 'react-router';
 import { Router, Route, Switch } from 'react-router-dom';
@@ -91,28 +90,6 @@ enableLogging({
 });
 */
 
-
-Sentry.init({
-	release: electron.version.app,
-	environment: isPackaged ? 'production' : 'development',
-	dsn: SENTRY_DSN,
-	maxBreadcrumbs: 20,
-	beforeSend: (e: any) => {
-		e.request.url = '';
-		return e;
-	},
-	integrations: [
-		new Sentry.Integrations.GlobalHandlers({
-			onerror: true,
-			onunhandledrejection: true,
-		}),
-	],
-});
-
-Sentry.setContext('info', {
-	network: I.NetworkMode[S.Auth.networkConfig?.mode],
-	isPackaged: isPackaged,
-});
 
 const RoutePage: FC<RouteComponentProps> = (props) => {
 

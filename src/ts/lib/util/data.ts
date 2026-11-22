@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/browser';
 import { reaction, IReactionDisposer } from 'mobx';
 import object from './object';
 import aiProvider from './aiProvider';
@@ -399,7 +398,6 @@ class UtilData {
 		S.Common.spaceSet(info.accountSpaceId);
 
 		analytics.profile(info.analyticsId, info.networkId);
-		Sentry.setUser({ id: info.analyticsId });
 	};
 
 	/**
