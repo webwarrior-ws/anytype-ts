@@ -190,7 +190,13 @@ const PageHeadEditor = forwardRef<RefProps, Props>((props, ref) => {
 				) : ''}
 
 				{source ? (
-					<div className="bookmarkLink" onClick={() => Action.openUrl(source)} onContextMenu={onSourceContextMenu}>
+					<div
+						className="bookmarkLink"
+						onClick={() => Action.openUrl(source)}
+						onAuxClick={e => U.Common.checkAuxButton(e) ? Action.openUrl(source) : null}
+						onMouseDown={e => U.Common.checkAuxButton(e) ? e.preventDefault() : null}
+						onContextMenu={onSourceContextMenu}
+					>
 						{iconImage ? <img className="fav" src={S.Common.imageUrl(iconImage, I.ImageSize.Small)} /> : ''}
 						<div className="url">{U.String.shortUrl(source)}</div>
 					</div>

@@ -53,6 +53,36 @@ const Cell = forwardRef<I.CellRef, Props>((props, ref) => {
 		return Relation.checkRelationValue(relation, record[relation.relationKey]);
 	};
 
+	const onAuxClickHandler = (e: any) => {
+		// Middle-click: URL-type relations (Url/Email/Phone) open in the browser,
+		// mirroring the left-click read-only path
+		if (!U.Common.checkAuxButton(e)) {
+			return;
+		};
+
+		if (!relation || !record || !Relation.isUrl(relation.format)) {
+			return;
+		};
+
+		const value = record[relation.relationKey] || '';
+		if (!value) {
+			return;
+		};
+
+		e.preventDefault();
+		e.stopPropagation();
+
+		Action.openUrl(Relation.checkUrlScheme(relation.format, value));
+		analytics.event('RelationUrlOpen');
+	};
+
+	const onMouseDownHandler = (e: any) => {
+		// Middle button: suppress the browser's default autoscroll, the open action runs in onAuxClick
+		if (U.Common.checkAuxButton(e)) {
+			e.preventDefault();
+		};
+	};
+
 	const onClickHandler = (e: any) => {
 		e.stopPropagation();
 
@@ -652,6 +682,8 @@ const Cell = forwardRef<I.CellRef, Props>((props, ref) => {
 			id={elementId} 
 			className={cn.join(' ')} 
 			onClick={onClick} 
+			onAuxClick={onAuxClickHandler}
+			onMouseDown={onMouseDownHandler}
 			onMouseEnter={onMouseEnterHandler} 
 			onMouseLeave={onMouseLeaveHandler}
 		>
