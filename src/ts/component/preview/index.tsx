@@ -84,7 +84,49 @@ const PreviewIndex = forwardRef(() => {
 		Preview.previewHide(true);
 	};
 
+	const onAuxClick = (e: MouseEvent) => {
+		// The polygon overlays the hovered inline link, so middle-clicks land here.
+		// Mirror onClick: objects with Source open it in the browser, the rest open in a new tab.
+		if (!U.Common.checkAuxButton(e)) {
+			return;
+		};
+
+		switch (type) {
+			case I.PreviewType.Link: {
+				const route = U.Common.getRouteFromUrl(target);
+
+				if (route) {
+					const routeParam = U.Router.getParam(route);
+
+					if (routeParam.id && routeParam.spaceId) {
+						U.Object.getById(routeParam.id, { spaceId: routeParam.spaceId }, (obj) => {
+							obj ? U.Object.openConfig(e, obj) : Action.openUrl(target);
+						});
+						break;
+					};
+				};
+
+				Action.openUrl(target);
+				break;
+			};
+
+			case I.PreviewType.Default:
+			case I.PreviewType.Object: {
+				if (!U.Object.openSource(object)) {
+					U.Object.openConfig(e, object);
+				};
+				break;
+			};
+		};
+	};
+
 	const onMouseDown = (e: MouseEvent) => {
+		// Middle button: suppress the browser's autoscroll, the open action runs in onAuxClick
+		if (U.Common.checkAuxButton(e)) {
+			e.preventDefault();
+			return;
+		};
+
 		if (e.button === 2) {
 			const el = U.Dom.get('preview');
 			if (el) {
@@ -272,7 +314,7 @@ const PreviewIndex = forwardRef(() => {
 			onMouseLeave={() => Preview.previewHide(true)}
 			onMouseDown={onMouseDown}
 		>
-			<div ref={polygonRef} className="polygon" onClick={onClick} onMouseDown={onMouseDown} />
+			<div ref={polygonRef} className="polygon" onClick={onClick} onAuxClick={onAuxClick} onMouseDown={onMouseDown} />
 			<div className="content">
 				{head}
 

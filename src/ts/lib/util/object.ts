@@ -169,7 +169,7 @@ class UtilObject {
 	 * Returns false if object doesn't have Source prop.
 	 */
 	openSource (object: any): boolean {
-		const source = Relation.getStringValue(object.source);
+		const source = object ? Relation.getStringValue(object.source) : '';
 		if (!source) {
 			return false;
 		};

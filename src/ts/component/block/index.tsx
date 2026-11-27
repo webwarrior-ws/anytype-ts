@@ -826,6 +826,12 @@ const Block = forwardRef<Ref, Props>((props, ref) => {
 			item.onmousedown = (e: MouseEvent) => {
 				// Open link in browser on middle-click
 				if (U.Common.checkAuxButton(e)) {
+					e.preventDefault();
+
+					if (!U.Object.openSource(object)) {
+						U.Object.openEvent(e, object);
+					};
+
 					return;
 				}
 				
