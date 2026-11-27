@@ -138,7 +138,13 @@ const MenuOptionEdit = forwardRef<I.MenuRef, I.Menu>((props, ref) => {
 				type: I.NavigationType.Go,
 				route: analytics.route.relation,
 				filters: [
-					{ relationKey: getOptionRelationKey(), condition: I.FilterCondition.In, value: [ option.id ] },
+					{
+						operator: I.FilterOperator.Or,
+						nestedFilters: [
+							{ relationKey: getOptionRelationKey(), condition: I.FilterCondition.In, value: [ option.id ] },
+							{ relationKey: 'name', condition: I.FilterCondition.Equal, value: option.name },
+						],
+					},
 				],
 				skipIds: [ option.id ],
 			},
